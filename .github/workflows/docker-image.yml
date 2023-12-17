@@ -14,5 +14,5 @@ jobs:
     - name: Build the Docker image
       working-directory: ./backend 
       run: |
-        IMAGE_TAG=my-image-name:$(date +%s)
+        IMAGE_TAG=devops-backend-esgi:$(date +%s)
         docker build --file Dockerfile --tag $IMAGE_TAG .
