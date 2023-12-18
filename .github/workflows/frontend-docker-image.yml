@@ -27,4 +27,4 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: hcachon/devops-frontend:latest-$(date +%Y-%m-%d)
+          tags: hcachon/devops-frontend:latest
