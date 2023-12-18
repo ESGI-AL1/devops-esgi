@@ -31,6 +31,6 @@ jobs:
           run: |
             echo ${{ github.workspace }} 
             IMAGE_TAG=devops-backend-esgi:$(date +%s)
-            docker build --file Dockerfile --tag $IMAGE_TAG .
+            docker build --file ./backend/Dockerfile --tag $IMAGE_TAG .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
