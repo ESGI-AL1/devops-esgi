@@ -11,10 +11,9 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Check out the repo
-        uses: actions/checkout@v4
         
-      - uses: actions/checkout@v3
       - name: Login to GitHub Package Registry
         run: echo "${{ secrets.TEST }}" | docker login docker.pkg.github.com --username "${{ secrets.TEST_USERNAME }}" --password-stdin
       
