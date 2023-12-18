@@ -23,13 +23,9 @@ jobs:
         with:
           images: my-docker-hub-namespace/my-docker-hub-repository
       
+      - uses: docker/build-push-action@v5
+      - working-directory: ./backend 
       - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
-          working-directory: ./backend 
-          run: |
-            echo ${{ github.workspace }} 
-            IMAGE_TAG=devops-backend-esgi:$(date +%s)
-            docker build --file ./backend/Dockerfile --tag $IMAGE_TAG .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
