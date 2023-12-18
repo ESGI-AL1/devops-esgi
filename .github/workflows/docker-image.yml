@@ -29,7 +29,8 @@ jobs:
         with:
           working-directory: ./backend 
           run: |
-            pwd  
+            echo "COUCOU"
+            echo pwd  
             IMAGE_TAG=devops-backend-esgi:$(date +%s)
             docker build --file Dockerfile --tag $IMAGE_TAG .
           push: true
