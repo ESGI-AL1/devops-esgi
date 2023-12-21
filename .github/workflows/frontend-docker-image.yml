@@ -42,7 +42,10 @@ jobs:
         node-version: '15'
 
     - name: Test & Code Coverage
-      run: npm test -- --coverage
+      run: |
+        cd frontend
+        npm install
+        npm test -- --coverage
       
     - name: Upload Code Coverage
       uses: sonarsource/sonarcloud-github-action@master
