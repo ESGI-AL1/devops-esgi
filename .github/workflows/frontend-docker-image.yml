@@ -48,7 +48,6 @@ jobs:
       
     - name: Upload Code Coverage
       uses: sonarsource/sonarcloud-github-action@master
-      with:
-        projectBaseDir: .
+    
       env: 
         SONAR_TOKEN: ${{ secrets.CODECOV_TOKEN }}
