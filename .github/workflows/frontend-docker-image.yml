@@ -43,6 +43,7 @@ jobs:
 
     - name: Test & Code Coverage
       run: |
+        echo ${{ secrets.SONAR_TOKEN }}
         cd frontend
         npm install
       
