@@ -30,25 +30,16 @@ jobs:
           tags: hcachon/devops-frontend:latest
 
   sonarcloud:
-    name: Build (Sonar Cloud)
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '15'
-
-    - name: Test & Code Coverage
-      run: |
-        echo ${{ secrets.SONAR_TOKEN }}
-        cd frontend
-        npm install
-      
-    - name: Upload Code Coverage
+    - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
-    
-      env: 
+      with:
+        projectBaseDir: ./frontend
+      env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
