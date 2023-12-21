@@ -50,3 +50,5 @@ jobs:
       uses: sonarsource/sonarcloud-github-action@master
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+    env: 
+      SONAR_TOKEN: ${{ secrets.CODECOV_TOKEN }}
