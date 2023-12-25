@@ -44,4 +44,5 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: hcachon/devops-backend:latest
+          tags: hcachon/devops-backend:${{ github.sha }}
+
