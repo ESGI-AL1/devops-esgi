@@ -39,7 +39,7 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-node@v4
       with:
-        context: ./frontend 
+        context: ./frontend-main
         node-version: '16'
 
     - name: Test & Code Coverage
