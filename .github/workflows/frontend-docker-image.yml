@@ -1,18 +1,55 @@
-name: Docker Image CI
+name: frontend ci
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - 'main'
 
 jobs:
-  build:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.TEST_USERNAME }}
+          password: ${{ secrets.TEST }}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: hcachon/devops-frontend:latest
+
+  sonarcloud:
+    name: Build (Sonar Cloud)
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      working-directory: ./frontend 
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - uses: actions/setup-node@v4
+      with:
+        context: ./frontend 
+        node-version: '16'
+
+    - name: Test & Code Coverage
       run: |
-        IMAGE_TAG=devops-frontend-esgi:$(date +%s)
-        docker build --file Dockerfile --tag $IMAGE_TAG .
+        echo ${{ secrets.SONAR_TOKEN }}
+        cd frontend
+        npm install
+      
+    - name: Upload Code Coverage
+      uses: sonarsource/sonarcloud-github-action@master
+    
+      env: 
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
