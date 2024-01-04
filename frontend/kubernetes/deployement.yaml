@@ -4,32 +4,33 @@ metadata:
   namespace: esgi-chancy-4al1
   name: frontend-deployment
   labels:
-    demo.app: frontend
+    demo.app: frontend-esgi-chancy-4al1
 spec:
   replicas: 2
   selector:
     matchLabels:
-      demo.app: frontend
+      demo.app: frontend-esgi-chancy-4al1
   template:
     metadata:
       labels:
-        demo.app: frontend
+        demo.app: frontend-esgi-chancy-4al1
     spec:
       containers:
         - name: frontend
-          image: catri-01/devops-esgi
+          image: hcachon/devops-frontend:latest
           ports:
             - containerPort: 80
+
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   namespace: esgi-chancy-4al1
-  name: frontend-service
+  name: frontend-esgi-chancy-4al1-service
 spec:
   selector:
-    demo.app: frontend
+    demo.app: frontend-esgi-chancy-4al1
   ports:
     - protocol: TCP
       port: 4566
@@ -44,7 +45,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
   # Mettre un nom unique pour la classe ingress
-  name: ubuntu
+  name: ubuntu-esgi-chancy-4al1
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
@@ -55,24 +56,24 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: frontend-demo-ingress
-  namespace: demo
+  name: frontend-esgi-chancy-4al1-ingress
+  namespace: esgi-chancy-4al1
 spec:
   # Récupérer le nom de la classe ingress ici
-  ingressClassName: ubuntu-demo
+  ingressClassName: nginx-esgi-chancy-4al1
   tls:
     - hosts:
-        - frontend.demo.jbienvenu.fr
-      secretName: frontend-demo-tls
+        - frontend.4al1.chancy.jbienvenu.fr
+      secretName: frontend-esgi-chancy-4al1-tls
   rules:
-    - host: frontend.demo.jbienvenu.fr
+    - host: frontend.4al1.chancy.jbienvenu.fr
       http:
         paths:
           - pathType: Prefix
             path: /
             backend:
               service:
-                name: frontend-demo-service
+                name: frontend-esgi-chancy-4al1-service
                 port:
                   number: 4566
 
