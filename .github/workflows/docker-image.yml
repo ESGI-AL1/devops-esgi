@@ -7,22 +7,21 @@ on:
 
 jobs:
   python-linter:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Setting up Python Env
-        uses: actions/setup-python@v5 
-        with:
-          context: ./backend
-          python-version: '3.10' 
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Setting up Python Env
+          uses: actions/setup-python@v5 
+          with:
+            python-version: '3.10'
+        - name: Install dependencies
           run: |
-                sudo apt install python3-pip
-                pip install -r linter-requirements.txt
-                black --check .
-        
+            sudo apt install python3-pip
+            pip install -r backend/linter-requirements.txt
+        - name: Run black lint check
+          run: black --check backend
+          
   docker:
     runs-on: ubuntu-latest
     steps:
