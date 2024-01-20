@@ -56,12 +56,12 @@ jobs:
           version: 'latest'
       - name: Configure Kubectl
         run: |
-          kubectl config set-context k8s-esgi-devops \
+          kubectl config set-context admin@k8s-esgi-devops \
             --namespace=esgi-hugo-4al1 \
-            --cluster=k8s-esgi-devops \
+            --cluster=admin@k8s-esgi-devops \
             --server=https://8fde55f4-a49b-4e5b-acef-3600c332baa3.api.k8s.fr-par.scw.cloud:6443 \
             --insecure-skip-tls-verify=true
-          kubectl config use-context k8s-esgi-devops
+          kubectl config use-context admin@k8s-esgi-devops
       - name: Apply Deployment
         run: |
           kubectl apply -f ./backend/kube/deployemnt.yaml
