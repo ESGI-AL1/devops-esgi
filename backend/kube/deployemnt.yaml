@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: esgi-hugo-4al1
+  name: backend-deployment
+  labels:
+    demo.app: backend-esgi-hugo-4al1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      demo.app: backend-esgi-hugo-4al1
+  template:
+    metadata:
+      labels:
+        demo.app: backend-esgi-hugo-4al1
+    spec:
+      containers:
+        - name: backend
+          image: hcachon/devops-backend:latest
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: esgi-hugo-4al1
+  name: backend-esgi-hugo-4al1-service
+spec:
+  selector:
+    demo.app: backend-esgi-chancy-4al1
+  ports:
+    - protocol: TCP
+      port: 4568
+      targetPort: 80
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  namespace: esgi-hugo-4al1
+  labels:
+    app.kubernetes.io/component: controller
+  # Mettre un nom unique pour la classe ingress
+  name: ubuntu-esgi-hugo-4al1
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: k8s.io/ingress-nginx
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: backend-esgi-hugo-4al1-ingress
+  namespace: esgi-hugo-4al1
+spec:
+  # Récupérer le nom de la classe ingress ici
+  ingressClassName: nginx-esgi-hugo-4al1
+  tls:
+    - hosts:
+        - backend.4al1.hugo.jbienvenu.fr
+      secretName: backend-esgi-hugo-4al1-tls
+  rules:
+    - host: backend.4al1.hugo.jbienvenu.fr
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: backend-esgi-hugo-4al1-service
+                port:
+                  number: 4568
+
