@@ -45,23 +45,22 @@ jobs:
           tags: hcachon/devops-backend:${{ github.sha }}
 
   kubernetes-deploy:
-    needs: [docker] 
+    needs: [docker]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Set up Kubectl
-        uses: azure/setup-kubectl@v3
+        uses: azure/setup-kubectl@v1
         with:
           version: 'latest'
       - name: Configure Kubectl
         run: |
-          kubectl config set-context admin@k8s-esgi-devops \
-            --namespace=esgi-hugo-4al1 \
-            --cluster=admin@k8s-esgi-devops \
-            --server=https://8fde55f4-a49b-4e5b-acef-3600c332baa3.api.k8s.fr-par.scw.cloud:6443 \
-            --insecure-skip-tls-verify=true
+          echo "${{ secrets.KUBERNETES_CONFIG }}" | base64 --decode > kubeconfig.yaml
+          export KUBECONFIG=$(pwd)/kubeconfig.yaml
           kubectl config use-context admin@k8s-esgi-devops
       - name: Apply Deployment
         run: |
           kubectl apply -f ./backend/kube/deployemnt.yaml
+
+
