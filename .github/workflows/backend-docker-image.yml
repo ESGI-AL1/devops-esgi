@@ -33,9 +33,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git status
           git add backend
           git commit -m "Format code with black"
           git push
+          git status
 
   docker:
     needs: [black-linter] 
