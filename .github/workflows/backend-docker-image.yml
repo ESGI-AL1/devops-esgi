@@ -20,8 +20,11 @@ jobs:
           sudo apt install python3-pip
           pip install -r backend/linter-requirements.txt
       - name: Run black lint check
-        run: black --check --diff backend || echo "Black check failed, but continuing..."
         id: check_changes
+        run: |
+          if ! black --check --diff backend; then
+            echo "Black check failed, but continuing..."
+          fi
       - name: Formatting using black
         if: steps.check_changes.outputs.changes != ''
         run: black backend/*.py
@@ -72,4 +75,4 @@ jobs:
           kubectl version --client
           kubectl config view
           kubectl cluster-info
-          kubectl apply -f ./backend/kube/deployemnt.yaml
+          kubectl apply -f ./backend/kube/deployment.yaml
