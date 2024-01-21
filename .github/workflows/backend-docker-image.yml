@@ -19,20 +19,19 @@ jobs:
         run: |
           sudo apt install python3-pip
           pip install -r backend/linter-requirements.txt
-      - name: Formatting using black
-        run: black backend/*.py
-      - name: Check for changes made by black
-        id: check_changes
-        run: echo "::set-output name=changes::$(git diff --exit-code)"
-      - name: Run black linter check
+      - name: Run black lint check
         run: black --check --diff backend
-      - name: Commit code if formatted
+        id: check_changes
+      - name: Formatting using black
+        if: steps.check_changes.outputs.changes != ''
+        run: black backend/*.py
+      - name: Commit formatted code
         if: steps.check_changes.outputs.changes != ''
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add backend
-          git commit -m "Formated code with black"
+          git commit -m "Format code with black"
           git push
 
   docker:
@@ -41,14 +40,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setting up Docker
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.TEST_USERNAME }}
           password: ${{ secrets.TEST }}
-      - name: Build image and push to Docker Hub
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -61,7 +60,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setting up Kubectl
+      - name: Set up Kubectl
         uses: azure/setup-kubectl@v3
         with:
           version: 'latest'
