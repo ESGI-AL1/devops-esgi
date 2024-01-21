@@ -6,41 +6,26 @@ on:
       - 'main'
 
 jobs:
-  black-linter:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setting up Python Env
-        uses: actions/setup-python@v5 
-        with:
-          python-version: '3.10'
-      - name: Install dependencies
-        run: |
-          sudo apt install python3-pip
-          pip install -r backend/linter-requirements.txt
-      - name: Run black lint check
-        id: check_changes
-        run: |
-          if ! black --check --diff backend; then
-            echo "Black check failed, but continuing..."
-          fi
-      - name: Formatting using black
-        if: steps.check_changes.outputs.changes != ''
-        run: black backend/*.py
-      - name: Commit formatted code
-        if: steps.check_changes.outputs.changes != ''
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git status
-          git add backend
-          git commit -m "Format code with black"
-          git push
-          git status
+  python-linter:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Setting up Python Env
+          uses: actions/setup-python@v5 
+          with:
+            python-version: '3.10'
+        - name: Install dependencies
+          run: |
+            sudo apt install python3-pip
+            pip install -r backend/linter-requirements.txt
+        - name: Formatting using black
+          run: black backend
+        - name: Run black lint check
+          run: black --check --diff backend
 
   docker:
-    needs: [black-linter] 
+    needs: [python-linter] 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -77,4 +62,4 @@ jobs:
           kubectl version --client
           kubectl config view
           kubectl cluster-info
-          kubectl apply -f ./backend/kube/deployment.yaml
+          kubectl apply -f ./backend/kube/deployemnt.yaml
