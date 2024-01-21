@@ -6,7 +6,7 @@ on:
       - 'main'
 
 jobs:
-  python-linter:
+  black-linter:
       runs-on: ubuntu-latest
       steps:
         - name: Checkout
@@ -20,12 +20,20 @@ jobs:
             sudo apt install python3-pip
             pip install -r backend/linter-requirements.txt
         - name: Formatting using black
-          run: black backend
+          run: black backend/*.py
         - name: Run black lint check
-          run: black --check --diff backend
+          run: black --check --diff backend/*.py
+        - name: Commit formatted code
+          run: |
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add backend
+            git commit -m "Format code with black"
+            git push
+
 
   docker:
-    needs: [python-linter] 
+    needs: [black-linter] 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -63,5 +71,4 @@ jobs:
           kubectl config view
           kubectl cluster-info
           kubectl apply -f ./backend/kube/deployemnt.yaml
-
-
+          
