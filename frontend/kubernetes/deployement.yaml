@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: hcachon/devops-frontend:latest
+          image: hcachon/devops-frontend:chancy
           ports:
             - containerPort: 80
 
