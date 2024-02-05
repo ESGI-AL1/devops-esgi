@@ -53,3 +53,24 @@ jobs:
     
       env: 
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  kubernetes-deploy:
+      needs: [docker]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Set up Kubectl
+          uses: azure/setup-kubectl@v3
+          with:
+            version: 'chancy'
+        - name: Configure Kubectl
+          run: |
+            echo "${{ secrets.KUBERNETES_CONFIG }}" | base64 --decode > kubeconfig.yaml
+            export KUBECONFIG=$(pwd)/kubeconfig.yaml
+            kubectl config use-context admin@k8s-esgi-devops
+            kubectl version --client
+            kubectl config view
+            kubectl cluster-info
+            kubectl apply -f ./frontend/kubernetes/deployemnt.yaml
+    
