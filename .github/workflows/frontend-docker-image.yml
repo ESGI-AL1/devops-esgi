@@ -63,7 +63,7 @@ jobs:
         - name: Set up Kubectl
           uses: azure/setup-kubectl@v3
           with:
-            version: 'chancy'
+            version: 'latest'
         - name: Configure Kubectl
           run: |
             echo "${{ secrets.KUBERNETES_CONFIG }}" | base64 --decode > kubeconfig.yaml
