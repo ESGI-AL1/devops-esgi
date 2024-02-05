@@ -72,5 +72,5 @@ jobs:
             kubectl version --client
             kubectl config view
             kubectl cluster-info
-            kubectl apply -f ./frontend/kubernetes/deployemnt.yaml
+            kubectl apply -f ./frontend/kubernetes/deployement.yaml
     
