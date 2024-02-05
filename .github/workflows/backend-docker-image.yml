@@ -62,5 +62,5 @@ jobs:
           kubectl version --client
           kubectl config view
           kubectl cluster-info
-          sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' deployment.yml          
+          sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' deploymnt.yml          
           kubectl apply -f ./backend/kube/deployemnt.yaml
