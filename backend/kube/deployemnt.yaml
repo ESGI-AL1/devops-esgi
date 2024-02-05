@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: hcachon/devops-backend:3911a3de8289f2bd8ed952691bdea6a75e2874f5    
+        image: hcachon/devops-backend:${IMAGE_VERSION}        
         imagePullPolicy: Always
         env:
         - name: DATABASE_HOST
