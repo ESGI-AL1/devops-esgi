@@ -46,7 +46,7 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: hcachon/devops-frontend:chancy
+          tags: hcachon/devops-frontend:${{ github.sha }}
 
   sonarcloud:
     name: Build (Sonar Cloud)
