@@ -17,8 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: hcachon/devops-frontend:chancy
-          imagePullPolicy: Always
+          image: hcachon/devops-frontend:${IMAGE_VERSION}      
           ports:
             - containerPort: 80
 
