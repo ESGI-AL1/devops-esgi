@@ -45,7 +45,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
   # Mettre un nom unique pour la classe ingress
-  name: ubuntu-esgi-chancy-4al1
+  name: nginx-esgi-chancy-4al1
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
