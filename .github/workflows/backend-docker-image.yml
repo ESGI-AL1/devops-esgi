@@ -62,4 +62,4 @@ jobs:
           kubectl version --client
           kubectl config view
           kubectl cluster-info
-          kubectl apply -f ./backend/kube/deploymnt.yaml
+          kubectl apply -f ./backend/kube/deployemnt.yaml
