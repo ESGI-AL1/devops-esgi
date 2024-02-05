@@ -118,6 +118,17 @@ metadata:
 spec:
   ingressClassName: nginx-esgi-hugo-4al1
   tls:
-  - hosts:
-    - backend.4al1.hugo.jbienvenu.fr
-    secretName:
+    - hosts:
+        - backend.4al1.hugo.jbienvenu.fr
+      secretName: backend-esgi-hugo-4al1-tls
+  rules:
+    - host: backend.4al1.chancy.jbienvenu.fr
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: backend-esgi-hugo-4al1-service
+                port:
+                  number: 4568
