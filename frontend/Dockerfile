@@ -1,6 +1,7 @@
 FROM node:20 as build
 WORKDIR /build
 COPY package.json ./
+RUN npm install
 COPY . .
 RUN npm run build
 
