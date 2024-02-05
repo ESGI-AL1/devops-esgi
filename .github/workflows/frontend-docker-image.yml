@@ -27,7 +27,7 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: hcachon/devops-frontend:latest
+          tags: hcachon/devops-frontend:chancy
 
   sonarcloud:
     name: Build (Sonar Cloud)
