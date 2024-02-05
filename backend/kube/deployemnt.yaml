@@ -16,21 +16,21 @@ spec:
         demo.app: backend-esgi-hugo-4al1
     spec:
       containers:
-        - name: backend
-          image: hcachon/devops-backend:latest
-          env:
-          - name: DATABASE_HOST
-            value: database-esgi-hugo-4al1-service
-          - name: DATABASE_PORT
-            value: "45678"
-          - name: DATABASE_USER
-            value: "main"
-          - name: DATABASE_PASSWORD
-            value: "password"
-          - name: DATABASE_NAME
-            value: "main"
-          ports:
-            - containerPort: 8000
+      - name: backend
+        image: hcachon/devops-backend:latest
+        env:
+        - name: DATABASE_HOST
+          value: database-esgi-hugo-4al1-service
+        - name: DATABASE_PORT
+          value: "45678"
+        - name: DATABASE_USER
+          value: "main"
+        - name: DATABASE_PASSWORD
+          value: "password"
+        - name: DATABASE_NAME
+          value: "main"
+        ports:
+        - containerPort: 8000
 
 ---
 
@@ -45,28 +45,26 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-    demo.app: backend-esgi-hugo-database-4al1
+      demo.app: backend-esgi-hugo-database-4al1
   template:
     metadata:
       labels:
-    demo.app: backend-esgi-hugo-database-4al1
+        demo.app: backend-esgi-hugo-database-4al1
     spec:
       containers:
-        - name: postgres
-          image: postgres:16.1
-          env:
-          - name: POSTGRES_PASSWORD
-          - value: "password"
-          - name: POSTGRES_USER
-          - value: "user"
-          - name: POSTGRES_DB
-          - value: "main"
-          ports:
-            - containerPort: 5432
-
+      - name: postgres
+        image: postgres:16.1
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "password"
+        - name: POSTGRES_USER
+          value: "user"
+        - name: POSTGRES_DB
+          value: "main"
+        ports:
+        - containerPort: 5432
 
 ---
-
 
 apiVersion: v1
 kind: Service
@@ -75,14 +73,13 @@ metadata:
   name: backend-esgi-hugo-4al1-service
 spec:
   selector:
-    demo.app: backend-esgi-chancy-4al1
+    demo.app: backend-esgi-hugo-4al1
   ports:
-    - protocol: TCP
-      port: 4568
-      targetPort: 8000
+  - protocol: TCP
+    port: 4568
+    targetPort: 8000
 
 ---
-
 
 apiVersion: v1
 kind: Service
@@ -91,11 +88,11 @@ metadata:
   name: database-esgi-hugo-4al1-service
 spec:
   selector:
-    demo.app: database-esgi-chancy-4al1
+    demo.app: backend-esgi-hugo-database-4al1
   ports:
-    - protocol: TCP
-      port: 45678
-      targetPort: 5432
+  - protocol: TCP
+    port: 45678
+    targetPort: 5432
 
 ---
 
@@ -105,8 +102,7 @@ metadata:
   namespace: esgi-hugo-4al1
   labels:
     app.kubernetes.io/component: controller
-  # Mettre un nom unique pour la classe ingress
-  name: ubuntu-esgi-hugo-4al1
+  name: nginx-esgi-hugo-4al1
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"
 spec:
@@ -120,21 +116,8 @@ metadata:
   name: backend-esgi-hugo-4al1-ingress
   namespace: esgi-hugo-4al1
 spec:
-  # Récupérer le nom de la classe ingress ici
   ingressClassName: nginx-esgi-hugo-4al1
   tls:
-    - hosts:
-        - backend.4al1.hugo.jbienvenu.fr
-      secretName: backend-esgi-hugo-4al1-tls
-  rules:
-    - host: backend.4al1.chancy.jbienvenu.fr
-      http:
-        paths:
-          - pathType: Prefix
-            path: /
-            backend:
-              service:
-                name: backend-esgi-hugo-4al1-service
-                port:
-                  number: 4568
-
+  - hosts:
+    - backend.4al1.hugo.jbienvenu.fr
+    secretName:
