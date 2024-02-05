@@ -18,7 +18,6 @@ spec:
       containers:
       - name: backend
         image: hcachon/devops-backend:${IMAGE_VERSION}        
-        imagePullPolicy: Always
         env:
         - name: DATABASE_HOST
           value: database-esgi-hugo-4al1-service
