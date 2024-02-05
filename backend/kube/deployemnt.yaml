@@ -66,7 +66,7 @@ spec:
         - backend.4al1.hugo.jbienvenu.fr
       secretName: backend-esgi-hugo-4al1-tls
   rules:
-    - host: backend.4al1.hugo.jbienvenu.fr
+    - host: backend.4al1.chancy.jbienvenu.fr
       http:
         paths:
           - pathType: Prefix
