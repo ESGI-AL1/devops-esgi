@@ -24,7 +24,7 @@ spec:
         - name: DATABASE_PORT
           value: "45678"
         - name: DATABASE_USER
-          value: "main"
+          value: "user"
         - name: DATABASE_PASSWORD
           value: "password"
         - name: DATABASE_NAME
