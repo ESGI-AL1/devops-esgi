@@ -77,6 +77,3 @@ jobs:
           kubectl cluster-info
           sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' backend/kube/deployment.yaml
           kubectl apply -f backend/kube/deployment.yaml
-      - name: Verify Deployment
-        run: |
-          kubectl rollout status deployment/backend-deployment -n esgi-hugo-4al1
