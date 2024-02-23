@@ -6,26 +6,37 @@ on:
       - 'main'
 
 jobs:
-  python-linter:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-        - name: Setting up Python Env
-          uses: actions/setup-python@v5 
-          with:
-            python-version: '3.10'
-        - name: Install dependencies
-          run: |
-            sudo apt install python3-pip
-            pip install -r backend/linter-requirements.txt
-        - name: Formatting using black
-          run: black backend
-        - name: Run black lint check
-          run: black --check --diff backend
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setting up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/linter-requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install dependencies
+        run: |
+          pip install pip-tools
+          pip-sync backend/linter-requirements.txt
+      - name: Formatting using black
+        run: black backend
+      - name: Black lint check
+        run: black --check --diff backend
+      - name: Security vulnerability scan
+        run: |
+          pip install safety
+          safety check -r backend/linter-requirements.txt
 
   docker:
-    needs: [python-linter] 
+    needs: [python]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,12 +48,14 @@ jobs:
         with:
           username: ${{ secrets.TEST_USERNAME }}
           password: ${{ secrets.TEST }}
-      - name: Build and push
+      - name: Build and push with cache
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: true
           tags: hcachon/devops-backend:${{ github.sha }}
+          cache-from: type=registry,ref=hcachon/devops-backend:cache
+          cache-to: type=inline
 
   kubernetes-deploy:
     needs: [docker]
@@ -62,5 +75,8 @@ jobs:
           kubectl version --client
           kubectl config view
           kubectl cluster-info
-          sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' backend/kube/deployemnt.yaml
-          kubectl apply -f backend/kube/deployemnt.yaml
+          sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' backend/kube/deployment.yaml
+          kubectl apply -f backend/kube/deployment.yaml
+      - name: Verify Deployment
+        run: |
+          kubectl rollout status deployment/my-deployment -n my-namespace
