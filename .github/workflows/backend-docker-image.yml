@@ -75,8 +75,8 @@ jobs:
           kubectl version --client
           kubectl config view
           kubectl cluster-info
-          sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' backend/kube/deployment.yaml
-          kubectl apply -f backend/kube/deployment.yaml
+          sed -i 's/\${IMAGE_VERSION}/${{ github.sha }}/' backend/kube/deploymnnt.yaml
+          kubectl apply -f backend/kube/deploymnt.yaml
       - name: Verify Deployment
         run: |
-          kubectl rollout status deployment/my-deployment -n my-namespace
+          kubectl rollout status deployment/backend-deployment -n esgi-hugo-4al1
