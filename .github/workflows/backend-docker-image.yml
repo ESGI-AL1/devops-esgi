@@ -26,8 +26,6 @@ jobs:
         run: |
           pip install pip-tools
           pip-sync backend/linter-requirements.txt
-      - name: Formatting using black
-        run: black backend
       - name: Black lint check
         run: black --check --diff backend
       - name: Security vulnerability scan
